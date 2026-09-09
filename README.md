@@ -1,2 +1,13 @@
-# Tea-Recipes
-A cozy, single-file web app with 52 easy-to-make tea recipes — fresh ingredients, step-by-step instructions, filters, and browser-saved favorites. No build, no dependencies.
+# The Easy Steep 🫖
+
+A warm, single-page web app collecting 52 no-fuss tea recipes you can make from fresh kitchen ingredients — no fancy gear or tea ceremony required.
+
+## Features
+- **52 recipes**, each with ingredients, step-by-step instructions, brew time, yield, and a helpful tip
+- **Filter by type** — Fruity, Spiced, Herbal & Calming, and Under 5 Min
+- **Favorites** — tap the ♥ to save teas; they persist in your browser via localStorage
+- **Fully self-contained** — one `index.html` file with inline CSS and JavaScript, no build step, no dependencies, no external assets
+- **Custom inline-SVG favicon** and responsive layout
+
+## Usage
+Open `index.html` in any browser, or host it anywhere static. That's it.
