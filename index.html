@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Easy Steep</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='26' fill='%23f7f0e3'/%3E%3Cg fill='none' stroke='%23c4552e' stroke-width='4' stroke-linecap='round' opacity='.85'%3E%3Cpath d='M50 36 q-6 -8 0 -16'/%3E%3Cpath d='M62 34 q-6 -8 0 -16'/%3E%3Cpath d='M74 36 q-6 -8 0 -16'/%3E%3C/g%3E%3Cpath d='M28 62 h64 a4 4 0 0 1 4 4 v2 a34 30 0 0 1 -68 0 v-2 a4 4 0 0 1 4 -4 Z' fill='%23c4552e'/%3E%3Cpath d='M42 62 a20 12 0 0 1 40 0 Z' fill='%239c3f1f'/%3E%3Ccircle cx='62' cy='46' r='4' fill='%23d99a2b'/%3E%3Cpath d='M28 70 q-16 -2 -20 12 q6 -4 12 -3 q4 -6 12 -3 Z' fill='%23c4552e'/%3E%3Cpath d='M92 66 q16 2 12 22' fill='none' stroke='%23c4552e' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M78 88 q9 -3 6 10 q-11 -1 -6 -10 Z' fill='%236f7f5c'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --cream:#f7f0e3;
+    --paper:#fffaf0;
+    --ink:#2f2a22;
+    --terra:#c4552e;
+    --terra-deep:#9c3f1f;
+    --sage:#6f7f5c;
+    --sage-deep:#4f5c40;
+    --honey:#d99a2b;
+    --blush:#e8c9b8;
+    --line:#d8cbb2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:64px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  /* Header */
+  header{
+    text-align:center;
+    padding:72px 24px 40px;
+    position:relative;
+    overflow:hidden;
+  }
+  .kicker{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.42em;
+    font-size:11px;
+    font-weight:700;
+    color:var(--terra);
+    margin-bottom:22px;
+  }
+  h1{
+    font-size:clamp(48px,10vw,104px);
+    line-height:.92;
+    font-weight:400;
+    letter-spacing:-.02em;
+    font-style:italic;
+  }
+  h1 .steam{color:var(--terra);}
+  .sub{
+    margin:24px auto 0;
+    max-width:520px;
+    font-size:18px;
+    color:#5d5544;
+  }
+  .divider{
+    width:56px;height:2px;background:var(--terra);
+    margin:34px auto 0;
+  }
+
+  /* Filter bar */
+  .filters{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+    margin:40px 0 8px;
+  }
+  .chip{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:12.5px;font-weight:600;letter-spacing:.04em;
+    padding:9px 18px;border-radius:999px;
+    border:1.5px solid var(--line);
+    background:transparent;color:#6a624f;
+    cursor:pointer;transition:all .2s ease;
+  }
+  .chip:hover{border-color:var(--terra);color:var(--terra);}
+  .chip.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+
+  /* Grid */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:22px;
+    padding:34px 0 20px;
+  }
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    transition:transform .25s ease,box-shadow .25s ease;
+    opacity:0;transform:translateY(18px);
+  }
+  .card.in{opacity:1;transform:none;}
+  .card:hover{transform:translateY(-5px);box-shadow:0 18px 40px -22px rgba(60,45,25,.45);}
+  .card-top{
+    padding:26px 24px 18px;
+    position:relative;
+    background:linear-gradient(160deg,var(--tint,#f3e7d3),transparent);
+  }
+  .emoji{font-size:34px;line-height:1;}
+  .fav{
+    position:absolute;top:20px;right:18px;
+    width:38px;height:38px;border-radius:50%;
+    border:1.5px solid var(--line);background:var(--paper);
+    cursor:pointer;font-size:18px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .18s ease;color:#c9bfa8;
+  }
+  .fav:hover{border-color:var(--terra);color:var(--terra);transform:scale(1.08);}
+  .fav.on{background:var(--terra);border-color:var(--terra);color:#fff;}
+  .fav.pop{animation:pop .32s ease;}
+  @keyframes pop{0%{transform:scale(1);}45%{transform:scale(1.35);}100%{transform:scale(1);}}
+  .empty{
+    grid-column:1/-1;text-align:center;padding:60px 20px;color:#8a8069;
+    font-size:17px;font-style:italic;
+  }
+  .card h2{
+    font-size:26px;font-weight:400;font-style:italic;
+    margin:12px 0 6px;letter-spacing:-.01em;
+  }
+  .tagline{font-size:14.5px;color:#6a624f;min-height:42px;}
+  .meta{
+    display:flex;gap:16px;margin-top:14px;
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--sage-deep);
+  }
+  .meta span{display:flex;align-items:center;gap:5px;}
+  .card-body{padding:4px 24px 26px;}
+  .lbl{
+    font-family:"Helvetica Neue",Arial,sans-serif;
+    font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.16em;
+    color:var(--terra);
+    margin:16px 0 8px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .lbl::after{content:"";flex:1;height:1px;background:var(--line);}
+  .ing{list-style:none;font-size:15px;}
+  .ing li{padding:3px 0 3px 20px;position:relative;color:#3e382d;}
+  .ing li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:6px;border-radius:50%;background:var(--sage);}
+  .steps{list-style:none;counter-reset:s;font-size:15px;}
+  .steps li{padding:6px 0 6px 34px;position:relative;color:#3e382d;}
+  .steps li::before{
+    counter-increment:s;content:counter(s);
+    position:absolute;left:0;top:6px;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--ink);color:var(--paper);
+    font-family:"Helvetica Neue",Arial,sans-serif;font-size:11px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tip{
+    margin-top:16px;padding:12px 14px;border-radius:12px;
+    background:#f3ecdb;border-left:3px solid var(--honey);
+    font-size:13.5px;color:#5d5544;font-style:italic;
+  }
+  .tip b{font-style:normal;color:var(--terra-deep);}
+
+  footer{
+    text-align:center;padding:56px 24px 20px;color:#8a8069;
+    font-size:14px;
+  }
+  footer .divider{margin:0 auto 20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Little Pot &middot; Big Comfort</div>
+  <h1>The Easy <span class="steam">Steep</span></h1>
+  <p class="sub">Fifty-two cozy, no-fuss teas you can build from fresh things in your kitchen. No fancy gear, no tea ceremony &mdash; just a pot, some hot water, and a few minutes.</p>
+  <div class="divider"></div>
+</header>
+
+<div class="wrap">
+  <div class="filters" id="filters">
+    <button class="chip active" data-f="all">All Teas</button>
+    <button class="chip" data-f="fruity">Fruity</button>
+    <button class="chip" data-f="spiced">Spiced</button>
+    <button class="chip" data-f="herbal">Herbal &amp; Calming</button>
+    <button class="chip" data-f="quick">Under 5 Min</button>
+    <button class="chip" data-f="fav">♥ Favorites</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</div>
+
+<footer>
+  <div class="divider"></div>
+  Steep gently, sip slowly. Adjust honey and spice to your own taste.<br>
+  <em>The Easy Steep &middot; a little collection of everyday brews</em>
+</footer>
+
+<script>
+const teas = [
+  {
+    name:"Pear & Ginger",
+    emoji:"🍐",
+    tint:"#eef0dd",
+    cats:["fruity","spiced"],
+    time:"12 min",
+    serves:"2 cups",
+    tag:"Sweet, warming, and a little spicy. The ripe pear does all the sweetening for you.",
+    ing:["1 ripe pear, thinly sliced","1-inch piece fresh ginger, sliced","3 cups water","1 tsp honey (optional)","Squeeze of lemon"],
+    steps:["Add pear slices and ginger to a small pot with the water.","Bring to a gentle boil, then lower heat and simmer 8-10 minutes.","Strain into cups. Stir in honey and a squeeze of lemon.","Drop a slice of cooked pear in each cup to serve."],
+    tip:"<b>Riper is better.</b> A soft, fragrant pear gives the sweetest cup."
+  },
+  {
+    name:"Lemon, Ginger & Honey",
+    emoji:"🍋",
+    tint:"#f6ecc9",
+    cats:["spiced","quick"],
+    time:"5 min",
+    serves:"1 cup",
+    tag:"The classic feel-better mug. Bright, soothing, ready in minutes.",
+    ing:["1-inch fresh ginger, grated or sliced","Juice of half a lemon","1 tsp honey","1 cup hot water"],
+    steps:["Put the ginger in a mug and pour over hot (not boiling) water.","Cover and steep 4 minutes.","Stir in lemon juice and honey.","Add the lemon peel for extra aroma if you like."],
+    tip:"<b>Let it cool slightly</b> before adding honey so it keeps its goodness."
+  },
+  {
+    name:"Fresh Mint",
+    emoji:"🌿",
+    tint:"#e0efdd",
+    cats:["herbal","quick"],
+    time:"5 min",
+    serves:"1 cup",
+    tag:"Just leaves and water. Clean, cooling, and endlessly refreshing.",
+    ing:["A generous handful of fresh mint leaves","1 cup boiling water","Honey or sugar to taste (optional)"],
+    steps:["Lightly press the mint leaves to release the oils.","Place in a mug or pot and cover with boiling water.","Steep 4-5 minutes until fragrant.","Sweeten if you like, or leave it as is."],
+    tip:"<b>Great iced too</b> &mdash; brew strong, then pour over ice."
+  },
+  {
+    name:"Cinnamon Apple",
+    emoji:"🍎",
+    tint:"#f3ddcf",
+    cats:["fruity","spiced"],
+    time:"15 min",
+    serves:"3 cups",
+    tag:"Tastes like autumn in a mug. Naturally sweet, no tea leaves needed.",
+    ing:["1 apple, cored and sliced","1 cinnamon stick (or 1/2 tsp ground)","4 cups water","1 tsp honey (optional)"],
+    steps:["Simmer the apple slices and cinnamon in the water for 10-12 minutes.","The water will turn golden and smell like cider.","Strain into mugs and sweeten to taste.","Reuse the apples for a second, lighter pot."],
+    tip:"<b>Add 2 cloves</b> while simmering for a deeper, spiced flavor."
+  },
+  {
+    name:"Chamomile & Honey",
+    emoji:"🌼",
+    tint:"#f6eecb",
+    cats:["herbal","quick"],
+    time:"6 min",
+    serves:"1 cup",
+    tag:"The bedtime cup. Soft, floral, and made for winding down.",
+    ing:["1 chamomile tea bag (or 1 tbsp dried flowers)","1 cup boiling water","1 tsp honey","A thin slice of lemon (optional)"],
+    steps:["Place the chamomile in a mug and pour over boiling water.","Cover and steep 5 minutes for a full, calming flavor.","Remove the bag or strain the flowers.","Stir in honey and add lemon if using."],
+    tip:"<b>Cover while steeping</b> to trap the soothing aromatic oils."
+  },
+  {
+    name:"Golden Turmeric",
+    emoji:"🌟",
+    tint:"#f6e3b8",
+    cats:["spiced"],
+    time:"8 min",
+    serves:"2 cups",
+    tag:"Earthy, golden, and warming. A gentle everyday tonic.",
+    ing:["1/2 tsp ground turmeric","1/2 inch fresh ginger, grated","Pinch of black pepper","2 cups water","1 tsp honey"],
+    steps:["Bring water, turmeric, ginger, and pepper to a gentle simmer.","Simmer 5 minutes, stirring now and then.","Strain into cups.","Sweeten with honey and stir well before it settles."],
+    tip:"<b>The pinch of pepper</b> helps your body absorb the turmeric."
+  },
+  {
+    name:"Lemongrass",
+    emoji:"🎋",
+    tint:"#e6efd4",
+    cats:["herbal"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Bright, citrusy, and calming. A staple across Southeast Asia.",
+    ing:["2 stalks fresh lemongrass","3 cups water","1 tsp honey (optional)","Slice of ginger (optional)"],
+    steps:["Trim and bruise the lemongrass stalks, then cut into pieces.","Simmer in water for 7-8 minutes.","Strain into cups.","Add honey or a slice of ginger to round it out."],
+    tip:"<b>Bruise the stalks</b> with the back of a knife to release the aroma."
+  },
+  {
+    name:"Hibiscus Berry",
+    emoji:"🌺",
+    tint:"#f3d3d8",
+    cats:["fruity","herbal"],
+    time:"8 min",
+    serves:"2 cups",
+    tag:"Tart, ruby-red, and gorgeous. Just as good hot or iced.",
+    ing:["2 tbsp dried hibiscus flowers","A handful of berries (fresh or frozen)","3 cups water","1-2 tsp honey"],
+    steps:["Bring water to a boil, then add hibiscus and berries.","Turn off the heat and steep 5-6 minutes.","Strain &mdash; the tea will be deep red.","Sweeten generously; hibiscus is naturally tart."],
+    tip:"<b>Chill and serve over ice</b> for a stunning summer drink."
+  },
+  {
+    name:"Simple Cardamom Chai",
+    emoji:"☕",
+    tint:"#e9d6bd",
+    cats:["spiced"],
+    time:"12 min",
+    serves:"2 cups",
+    tag:"Cozy, milky, and spiced. A stripped-down chai anyone can make.",
+    ing:["4 cardamom pods, crushed","1 cinnamon stick","2 black tea bags","1 cup water","1 cup milk","1-2 tsp sugar"],
+    steps:["Simmer cardamom and cinnamon in water for 4 minutes.","Add the tea bags and steep 3 minutes.","Pour in the milk and sugar, heat until steaming (don't boil over).","Strain into cups and serve hot."],
+    tip:"<b>Skip the tea bags</b> for a caffeine-free spiced milk."
+  },
+  {
+    name:"Orange & Clove",
+    emoji:"🍊",
+    tint:"#f6ddbf",
+    cats:["fruity","spiced"],
+    time:"12 min",
+    serves:"2 cups",
+    tag:"Festive and fragrant. Smells like the holidays, tastes like a hug.",
+    ing:["Peel of 1 orange","3 whole cloves","1 cinnamon stick","3 cups water","1 tsp honey"],
+    steps:["Simmer the orange peel, cloves, and cinnamon in water 8-10 min.","Strain into cups once golden and fragrant.","Stir in honey.","Garnish with a fresh orange slice."],
+    tip:"<b>Use a vegetable peeler</b> to take just the peel, not the bitter white pith."
+  },
+  {
+    name:"Vanilla Rooibos",
+    emoji:"🤎",
+    tint:"#e6d3c1",
+    cats:["herbal"],
+    time:"7 min",
+    serves:"1 cup",
+    tag:"Smooth, naturally sweet, and caffeine-free. Rooibos loves a splash of milk.",
+    ing:["1 rooibos tea bag (or 1 tbsp loose)","1/4 tsp vanilla extract","1 cup boiling water","Splash of milk (optional)","Honey to taste"],
+    steps:["Steep the rooibos in boiling water for 5 minutes.","Stir in the vanilla extract.","Add a splash of milk if you like it creamy.","Sweeten with honey and serve."],
+    tip:"<b>Rooibos won't turn bitter</b> &mdash; you can steep it as long as you like."
+  },
+  {
+    name:"Rosehip",
+    emoji:"🌹",
+    tint:"#f3d5cf",
+    cats:["fruity","herbal"],
+    time:"12 min",
+    serves:"2 cups",
+    tag:"Tangy and rich in vitamin C. A tart, rosy cup that's lovely with honey.",
+    ing:["2 tbsp dried rosehips","3 cups water","1-2 tsp honey","Slice of lemon (optional)"],
+    steps:["Lightly crush the rosehips to open them up.","Simmer in water for 8-10 minutes.","Strain well through a fine sieve.","Sweeten with honey and add lemon if you like."],
+    tip:"<b>Strain carefully</b> to catch the fine inner hairs of the rosehips."
+  },
+  {
+    name:"Fennel Seed",
+    emoji:"🌱",
+    tint:"#e5efd5",
+    cats:["herbal","quick"],
+    time:"6 min",
+    serves:"1 cup",
+    tag:"Sweet, licorice-like, and settling. A classic after-dinner sip.",
+    ing:["1 tsp fennel seeds","1 cup boiling water","Honey to taste (optional)"],
+    steps:["Lightly crush the fennel seeds to release their oils.","Add to a mug and pour over boiling water.","Cover and steep 5 minutes.","Strain, sweeten if you like, and sip warm."],
+    tip:"<b>Great after a heavy meal</b> to help settle the stomach."
+  },
+  {
+    name:"Blueberry Lavender",
+    emoji:"🫐",
+    tint:"#ddd6ea",
+    cats:["fruity","herbal"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Fruity and floral, deep purple in the cup. Calming and a little fancy.",
+    ing:["1/2 cup blueberries (fresh or frozen)","1/2 tsp dried culinary lavender","3 cups water","1-2 tsp honey"],
+    steps:["Gently simmer the blueberries in water for 6 minutes, pressing to release juice.","Turn off the heat, add lavender, and steep 3 minutes.","Strain into cups.","Sweeten with honey to balance the tart berries."],
+    tip:"<b>Go easy on lavender</b> &mdash; too much turns soapy. A little goes far."
+  },
+  {
+    name:"Green Tea, Honey & Lemon",
+    emoji:"🍵",
+    tint:"#e2edcf",
+    cats:["quick"],
+    time:"4 min",
+    serves:"1 cup",
+    tag:"Light, grassy, and refreshing. The trick is not to scald the leaves.",
+    ing:["1 green tea bag (or 1 tsp loose)","1 cup hot water (not boiling)","1 tsp honey","Squeeze of lemon"],
+    steps:["Heat water until steaming but not boiling (about 80°C / 175°F).","Pour over the green tea and steep just 2-3 minutes.","Remove the bag promptly to avoid bitterness.","Stir in honey and a squeeze of lemon."],
+    tip:"<b>Boiling water makes it bitter.</b> Let the kettle rest a minute first."
+  },
+  {
+    name:"Sage & Lemon",
+    emoji:"🍃",
+    tint:"#e3ecda",
+    cats:["herbal"],
+    time:"8 min",
+    serves:"2 cups",
+    tag:"Earthy and soothing, especially for a scratchy throat.",
+    ing:["8-10 fresh sage leaves (or 1 tsp dried)","3 cups water","Juice of half a lemon","1 tsp honey"],
+    steps:["Bring the water to a boil and add the sage.","Turn off the heat and steep, covered, for 5 minutes.","Strain into cups.","Stir in lemon juice and honey."],
+    tip:"<b>A time-honored throat soother</b> &mdash; sip it slowly and warm."
+  },
+  {
+    name:"Cranberry Orange",
+    emoji:"🔴",
+    tint:"#f2d2ca",
+    cats:["fruity","spiced"],
+    time:"14 min",
+    serves:"3 cups",
+    tag:"Tart, festive, and jewel-toned. Basically holiday cheer in a mug.",
+    ing:["1/2 cup cranberries (fresh or frozen)","Peel of 1 orange","1 cinnamon stick","4 cups water","2 tsp honey"],
+    steps:["Simmer the cranberries, orange peel, and cinnamon 10-12 minutes.","Press the berries lightly as they soften.","Strain into mugs.","Sweeten well &mdash; cranberries are very tart."],
+    tip:"<b>Add a few cloves</b> for an even more festive, spiced aroma."
+  },
+  {
+    name:"Tulsi (Holy Basil)",
+    emoji:"🌿",
+    tint:"#dfecd6",
+    cats:["herbal"],
+    time:"8 min",
+    serves:"2 cups",
+    tag:"Peppery, aromatic, and grounding. A beloved everyday herbal in India.",
+    ing:["A handful of fresh tulsi leaves (or 1 tbsp dried)","3 cups water","Slice of ginger (optional)","Honey to taste"],
+    steps:["Bring the water to a boil and add the tulsi (and ginger if using).","Simmer gently for 4-5 minutes.","Strain into cups.","Sweeten lightly with honey and enjoy warm."],
+    tip:"<b>Regular basil works too</b> if you can't find tulsi &mdash; milder but lovely."
+  },
+  {
+    name:"Matcha Latte",
+    emoji:"🍵",
+    tint:"#d9e7c6",
+    cats:["quick"],
+    time:"5 min",
+    serves:"1 cup",
+    tag:"Whisked, frothy, and gently energizing. A creamy green pick-me-up.",
+    ing:["1 tsp matcha powder","2 tbsp hot water (not boiling)","1 cup warm milk","1 tsp honey or maple syrup"],
+    steps:["Sift the matcha into a cup to remove lumps.","Add the hot water and whisk briskly in a zig-zag until frothy.","Warm and froth the milk, then pour it in.","Sweeten to taste and stir."],
+    tip:"<b>Sifting first</b> is the secret to a smooth, lump-free matcha."
+  },
+  {
+    name:"Ginger Peach",
+    emoji:"🍑",
+    tint:"#f4ddc6",
+    cats:["fruity","spiced"],
+    time:"12 min",
+    serves:"2 cups",
+    tag:"Juicy, warming, and summery. Ripe peach meets a little ginger heat.",
+    ing:["1 ripe peach, sliced","1/2 inch fresh ginger, sliced","3 cups water","1 tsp honey"],
+    steps:["Simmer the peach and ginger in water for 8-10 minutes.","Press the peach lightly to release its juice.","Strain into cups.","Sweeten with honey and add a peach slice to serve."],
+    tip:"<b>Frozen peaches work great</b> when fresh ones aren't in season."
+  },
+  {
+    name:"Cardamom Rose",
+    emoji:"🌸",
+    tint:"#f2d6dd",
+    cats:["spiced","herbal"],
+    time:"9 min",
+    serves:"2 cups",
+    tag:"Delicate, floral, and aromatic. Feels like a little luxury.",
+    ing:["3 cardamom pods, crushed","1 tsp dried rose petals (culinary)","3 cups water","1-2 tsp honey"],
+    steps:["Simmer the crushed cardamom in water for 5 minutes.","Turn off the heat and add the rose petals; steep 3 minutes.","Strain into cups.","Sweeten with honey to bring out the floral notes."],
+    tip:"<b>Use food-grade rose petals</b> only &mdash; never floral-shop roses."
+  },
+  {
+    name:"Star Anise & Honey",
+    emoji:"⭐",
+    tint:"#e8d6bd",
+    cats:["spiced"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Warm, sweet, and licorice-scented. Deeply comforting on a cold night.",
+    ing:["2 whole star anise","1 cinnamon stick","3 cups water","2 tsp honey"],
+    steps:["Simmer the star anise and cinnamon in water for 7 minutes.","The water will turn amber and smell wonderful.","Strain into cups.","Stir in honey and serve hot."],
+    tip:"<b>One star anise goes a long way</b> &mdash; don't overdo it."
+  },
+  {
+    name:"Cucumber Mint Cooler",
+    emoji:"🥒",
+    tint:"#dceedd",
+    cats:["herbal","quick"],
+    time:"5 min",
+    serves:"2 cups",
+    tag:"Barely-there and ultra refreshing. Best served cold on a hot day.",
+    ing:["1/2 cucumber, thinly sliced","A handful of mint leaves","3 cups hot water","Squeeze of lime","Ice, to serve"],
+    steps:["Place the cucumber and mint in a jug.","Pour over the hot water and steep 4 minutes.","Add a squeeze of lime.","Let cool, then pour over ice."],
+    tip:"<b>Steep hot, serve cold</b> for the cleanest, crispest flavor."
+  },
+  {
+    name:"Elderflower",
+    emoji:"🌼",
+    tint:"#f2eecb",
+    cats:["fruity","herbal"],
+    time:"8 min",
+    serves:"2 cups",
+    tag:"Light, honeyed, and floral. Tastes like a summer meadow.",
+    ing:["2 tbsp dried elderflowers (or 1 tbsp cordial)","3 cups hot water","Squeeze of lemon","Honey to taste"],
+    steps:["Steep the elderflowers in hot water, covered, for 5 minutes.","Strain into cups.","Add a squeeze of lemon to brighten it.","Sweeten lightly &mdash; elderflower is naturally sweet."],
+    tip:"<b>No dried flowers?</b> A splash of elderflower cordial in hot water works too."
+  },
+  {
+    name:"Nettle",
+    emoji:"🌿",
+    tint:"#dbe9cf",
+    cats:["herbal"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Green, earthy, and mineral-rich. A traditional spring tonic.",
+    ing:["2 tbsp dried nettle leaves","3 cups boiling water","Squeeze of lemon","Honey to taste"],
+    steps:["Place the dried nettle in a pot or large mug.","Pour over boiling water and cover.","Steep 7-8 minutes for a full, green infusion.","Strain, then add lemon and honey."],
+    tip:"<b>Dried nettle doesn't sting</b> &mdash; only fresh leaves do."
+  },
+  {
+    name:"Lemon Balm",
+    emoji:"🍋",
+    tint:"#e8efd0",
+    cats:["herbal","quick"],
+    time:"6 min",
+    serves:"1 cup",
+    tag:"Gently lemony and calming. A soft herbal to unwind with.",
+    ing:["A handful of fresh lemon balm leaves","1 cup boiling water","Honey to taste (optional)"],
+    steps:["Lightly press the leaves to release their oils.","Place in a mug and cover with boiling water.","Steep, covered, for 4-5 minutes.","Strain and sweeten if you like."],
+    tip:"<b>Grows like a weed</b> &mdash; wonderful fresh from a windowsill pot."
+  },
+  {
+    name:"Pomegranate Green",
+    emoji:"🍇",
+    tint:"#eed3d6",
+    cats:["fruity","quick"],
+    time:"5 min",
+    serves:"1 cup",
+    tag:"Tart, bright, and antioxidant-packed. Green tea with a fruity lift.",
+    ing:["1 green tea bag","2 tbsp pomegranate juice","1 cup hot water (not boiling)","Honey to taste"],
+    steps:["Steep the green tea in hot water for 2-3 minutes, then remove.","Stir in the pomegranate juice.","Sweeten lightly with honey.","Serve warm, or chill over ice."],
+    tip:"<b>Add the juice after steeping</b> so the green tea stays smooth, not bitter."
+  },
+  {
+    name:"Thyme & Honey",
+    emoji:"🌾",
+    tint:"#e4ecd6",
+    cats:["herbal"],
+    time:"8 min",
+    serves:"2 cups",
+    tag:"Savory, herbal, and soothing. A gentle helper for a cough or cold.",
+    ing:["4-5 sprigs fresh thyme (or 1 tsp dried)","3 cups water","Juice of half a lemon","2 tsp honey"],
+    steps:["Bring the water to a boil and add the thyme.","Turn off the heat and steep, covered, 5 minutes.","Strain into cups.","Stir in lemon juice and honey."],
+    tip:"<b>A folk remedy for coughs</b> &mdash; warm and soothing on the throat."
+  },
+  {
+    name:"Coconut Cardamom Chai",
+    emoji:"🥥",
+    tint:"#ece1cd",
+    cats:["spiced"],
+    time:"12 min",
+    serves:"2 cups",
+    tag:"Creamy, tropical, and spiced. A dairy-free twist on classic chai.",
+    ing:["4 cardamom pods, crushed","1 cinnamon stick","2 black tea bags","1 cup water","1 cup coconut milk","1-2 tsp sugar"],
+    steps:["Simmer cardamom and cinnamon in water for 4 minutes.","Add the tea bags and steep 3 minutes.","Pour in the coconut milk and sugar; heat until steaming.","Strain into cups and serve hot."],
+    tip:"<b>Coconut milk foams beautifully</b> &mdash; whisk for a frothy top."
+  },
+  {
+    name:"Strawberry Basil",
+    emoji:"🍓",
+    tint:"#f3d3d0",
+    cats:["fruity","herbal"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Sweet berries and fresh basil. Unexpected, elegant, and great iced.",
+    ing:["1 cup strawberries, halved","4-5 fresh basil leaves","3 cups water","1-2 tsp honey"],
+    steps:["Gently simmer the strawberries in water for 6 minutes, pressing to release juice.","Turn off the heat, add basil, and steep 3 minutes.","Strain into cups.","Sweeten with honey; serve warm or over ice."],
+    tip:"<b>Save the cooked berries</b> to spoon over yogurt or toast."
+  },
+  {
+    name:"Lavender Chamomile Dream",
+    emoji:"💤",
+    tint:"#e0d9ea",
+    cats:["herbal","quick"],
+    time:"6 min",
+    serves:"1 cup",
+    tag:"The ultimate wind-down. Soft florals to send you off to sleep.",
+    ing:["1 tbsp dried chamomile","1/4 tsp dried culinary lavender","1 cup boiling water","1 tsp honey"],
+    steps:["Combine the chamomile and lavender in a mug.","Pour over boiling water and cover.","Steep 5 minutes to draw out the calming oils.","Strain and stir in honey."],
+    tip:"<b>Keep the lavender light</b> so it stays dreamy, not soapy."
+  },
+  {
+    name:"Mango Black Tea",
+    emoji:"🥭",
+    tint:"#f6e0bd",
+    cats:["fruity","quick"],
+    time:"5 min",
+    serves:"1 cup",
+    tag:"Tropical and bright over a sturdy black tea base. Lovely iced.",
+    ing:["1 black tea bag","1/4 cup fresh or frozen mango, diced","1 cup hot water","1 tsp honey"],
+    steps:["Muddle the mango lightly in the bottom of a mug.","Add the tea bag and pour over hot water.","Steep 3 minutes, then remove the bag.","Sweeten with honey; strain or leave the fruit in."],
+    tip:"<b>Pour over ice</b> for a quick tropical iced tea."
+  },
+  {
+    name:"Raspberry Leaf",
+    emoji:"🍇",
+    tint:"#ecd2d9",
+    cats:["herbal"],
+    time:"9 min",
+    serves:"2 cups",
+    tag:"Mild, earthy, and slightly tannic. A gentle traditional herbal.",
+    ing:["2 tbsp dried raspberry leaf","3 cups boiling water","Honey to taste","Squeeze of lemon (optional)"],
+    steps:["Place the raspberry leaf in a pot or large mug.","Pour over boiling water and cover.","Steep 6-7 minutes.","Strain, then sweeten and add lemon if you like."],
+    tip:"<b>Tastes close to a light black tea</b> but is naturally caffeine-free."
+  },
+  {
+    name:"Dandelion Root",
+    emoji:"🌾",
+    tint:"#e5d3ba",
+    cats:["herbal"],
+    time:"12 min",
+    serves:"2 cups",
+    tag:"Roasty, earthy, and coffee-like. A cozy caffeine-free alternative.",
+    ing:["2 tsp roasted dandelion root","3 cups water","Splash of milk (optional)","1 tsp honey or maple"],
+    steps:["Simmer the dandelion root in the water for 8-10 minutes.","The longer it goes, the richer and darker it gets.","Strain into cups.","Add milk and sweetener for a coffee-style cup."],
+    tip:"<b>Use roasted root</b> (not raw) for that deep, toasty flavor."
+  },
+  {
+    name:"Cinnamon Honey",
+    emoji:"🍯",
+    tint:"#f2ddb9",
+    cats:["spiced","quick"],
+    time:"5 min",
+    serves:"1 cup",
+    tag:"Two ingredients, pure comfort. Warm, sweet, and instantly soothing.",
+    ing:["1/2 tsp ground cinnamon (or 1 stick)","1 cup boiling water","1-2 tsp honey"],
+    steps:["Add the cinnamon to a mug.","Pour over boiling water and stir well.","Let it sit 3 minutes so the cinnamon settles.","Stir in honey once slightly cooled."],
+    tip:"<b>A cinnamon stick</b> gives a cleaner cup than ground (no sediment)."
+  },
+  {
+    name:"Clove & Cardamom",
+    emoji:"🟤",
+    tint:"#e7d3bc",
+    cats:["spiced"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Bold, warming, and deeply aromatic. A spice-lover's brew.",
+    ing:["3 whole cloves","4 cardamom pods, crushed","3 cups water","1-2 tsp honey"],
+    steps:["Crush the cloves and cardamom lightly.","Simmer in the water for 7 minutes.","Strain into cups.","Sweeten with honey and serve hot."],
+    tip:"<b>Add a slice of ginger</b> to turn it into a warming winter tonic."
+  },
+  {
+    name:"Apple Ginger",
+    emoji:"🍏",
+    tint:"#e4edcf",
+    cats:["fruity","spiced"],
+    time:"14 min",
+    serves:"3 cups",
+    tag:"Crisp apple with a ginger kick. Like cider, but lighter.",
+    ing:["1 apple, sliced","1 inch fresh ginger, sliced","4 cups water","1 tsp honey","Pinch of cinnamon (optional)"],
+    steps:["Simmer the apple and ginger in the water for 10-12 minutes.","Add a pinch of cinnamon near the end if you like.","Strain into mugs.","Sweeten with honey to taste."],
+    tip:"<b>Tart apples like Granny Smith</b> give the brightest flavor."
+  },
+  {
+    name:"Blackberry Sage",
+    emoji:"🫐",
+    tint:"#ddd2e2",
+    cats:["fruity","herbal"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Deep berry sweetness with a savory, herbal edge. Beautifully purple.",
+    ing:["1/2 cup blackberries","4-5 fresh sage leaves","3 cups water","1-2 tsp honey"],
+    steps:["Simmer the blackberries in the water 6 minutes, pressing to release juice.","Turn off the heat, add sage, and steep 3 minutes.","Strain into cups.","Sweeten with honey; serve hot or iced."],
+    tip:"<b>Frozen blackberries</b> break down faster and release more color."
+  },
+  {
+    name:"Lemon Verbena",
+    emoji:"🍋",
+    tint:"#e9efd0",
+    cats:["herbal","quick"],
+    time:"6 min",
+    serves:"1 cup",
+    tag:"Intensely lemony without any tartness. Fresh, clean, and uplifting.",
+    ing:["A handful of fresh lemon verbena leaves","1 cup boiling water","Honey to taste (optional)"],
+    steps:["Lightly crush the leaves to release their oils.","Place in a mug and cover with boiling water.","Steep 4-5 minutes.","Strain and sweeten if you like."],
+    tip:"<b>Dries beautifully</b> &mdash; keep a jar for a year-round lemon lift."
+  },
+  {
+    name:"Peppermint Cocoa",
+    emoji:"🍫",
+    tint:"#dbe4dc",
+    cats:["spiced"],
+    time:"7 min",
+    serves:"1 cup",
+    tag:"Part tea, part treat. Minty and chocolatey, like a cozy dessert.",
+    ing:["1 peppermint tea bag","1 tsp cocoa powder","1 cup hot water","2 tbsp warm milk","1 tsp honey or sugar"],
+    steps:["Steep the peppermint tea in hot water for 4 minutes.","Whisk the cocoa with the warm milk until smooth.","Stir the cocoa-milk into the tea.","Sweeten to taste."],
+    tip:"<b>Whisk the cocoa separately</b> first so it doesn't clump."
+  },
+  {
+    name:"Spiced Orange Rooibos",
+    emoji:"🍊",
+    tint:"#f0d9bf",
+    cats:["fruity","spiced","herbal"],
+    time:"9 min",
+    serves:"2 cups",
+    tag:"Naturally sweet rooibos brightened with orange and warm spice.",
+    ing:["2 rooibos tea bags","Peel of 1 orange","1 cinnamon stick","3 cups boiling water","Honey to taste"],
+    steps:["Add the rooibos, orange peel, and cinnamon to a pot.","Pour over boiling water and steep 6 minutes.","Strain into cups.","Sweeten lightly &mdash; rooibos is already sweet."],
+    tip:"<b>Caffeine-free and forgiving</b> &mdash; it won't turn bitter if it oversteeps."
+  },
+  {
+    name:"Cranberry Hibiscus",
+    emoji:"🌺",
+    tint:"#f0cfd3",
+    cats:["fruity","herbal"],
+    time:"9 min",
+    serves:"2 cups",
+    tag:"Tart on tart, ruby-red and zingy. A vitamin-C powerhouse.",
+    ing:["2 tbsp dried hibiscus","1/4 cup cranberries","3 cups water","2 tsp honey"],
+    steps:["Bring the water to a boil and add the cranberries and hibiscus.","Turn off the heat and steep 6 minutes.","Strain, pressing the berries to release juice.","Sweeten generously to balance the tartness."],
+    tip:"<b>Both are very tart</b> &mdash; don't be shy with the honey."
+  },
+  {
+    name:"Ginger Mint",
+    emoji:"🌿",
+    tint:"#dfeed6",
+    cats:["spiced","herbal","quick"],
+    time:"6 min",
+    serves:"1 cup",
+    tag:"Cooling mint meets warming ginger. Refreshing and settling at once.",
+    ing:["1/2 inch fresh ginger, sliced","A handful of fresh mint leaves","1 cup boiling water","Honey to taste"],
+    steps:["Add the ginger and mint to a mug.","Pour over boiling water and cover.","Steep 4-5 minutes.","Strain and sweeten if you like."],
+    tip:"<b>Great after meals</b> &mdash; both ginger and mint help digestion."
+  },
+  {
+    name:"Saffron Cardamom (Kahwa)",
+    emoji:"🧡",
+    tint:"#f3ddb8",
+    cats:["spiced"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"A fragrant Kashmiri classic. Golden, floral, and gently luxurious.",
+    ing:["A pinch of saffron threads","3 cardamom pods, crushed","1 tsp green tea leaves","3 cups water","Honey and slivered almonds to serve"],
+    steps:["Simmer the cardamom and saffron in water for 5 minutes.","Add the green tea and steep off the heat for 2 minutes.","Strain into cups.","Sweeten with honey and top with slivered almonds."],
+    tip:"<b>A little saffron goes far</b> &mdash; a pinch colors and scents the whole pot."
+  },
+  {
+    name:"Fig & Cinnamon",
+    emoji:"🟣",
+    tint:"#e6d3c8",
+    cats:["fruity","spiced"],
+    time:"14 min",
+    serves:"2 cups",
+    tag:"Rich, jammy, and honey-sweet. Feels indulgent but it's just fruit.",
+    ing:["2 dried figs, chopped","1 cinnamon stick","3 cups water","Honey to taste (optional)"],
+    steps:["Simmer the chopped figs and cinnamon in water 10-12 minutes.","The figs will soften and sweeten the brew.","Strain into cups.","Add honey only if you want it sweeter."],
+    tip:"<b>Mash the softened figs</b> back in for a fuller, richer cup."
+  },
+  {
+    name:"Roasted Barley (Mugicha)",
+    emoji:"🌾",
+    tint:"#e7d6bb",
+    cats:["quick"],
+    time:"5 min",
+    serves:"2 cups",
+    tag:"Nutty, toasty, caffeine-free. A Japanese staple, wonderful iced.",
+    ing:["2 tbsp roasted barley (or 1 barley tea bag)","3 cups hot water","Ice, to serve (optional)"],
+    steps:["Place the roasted barley in a pot or jug.","Pour over hot water and steep 4-5 minutes.","Strain into cups.","Serve hot, or chill and pour over ice."],
+    tip:"<b>Batch it cold</b> &mdash; steep in the fridge overnight for smooth iced tea."
+  },
+  {
+    name:"Jasmine Green",
+    emoji:"🌼",
+    tint:"#e4edd0",
+    cats:["quick"],
+    time:"4 min",
+    serves:"1 cup",
+    tag:"Delicately floral and calming. The scent alone is half the pleasure.",
+    ing:["1 jasmine green tea bag (or 1 tsp loose)","1 cup hot water (not boiling)","Honey to taste (optional)"],
+    steps:["Heat the water until steaming but not boiling.","Pour over the jasmine tea and steep 2-3 minutes.","Remove promptly to keep it smooth.","Sweeten lightly if you like, or enjoy plain."],
+    tip:"<b>Don't boil the water</b> &mdash; too hot scorches the delicate florals."
+  },
+  {
+    name:"Honeybush Vanilla",
+    emoji:"🍮",
+    tint:"#ecdcc2",
+    cats:["herbal"],
+    time:"8 min",
+    serves:"1 cup",
+    tag:"Rich, honeyed, and caffeine-free. Even smoother than rooibos.",
+    ing:["1 honeybush tea bag (or 1 tbsp loose)","1/4 tsp vanilla extract","1 cup boiling water","Splash of milk (optional)"],
+    steps:["Steep the honeybush in boiling water for 5-6 minutes.","Stir in the vanilla extract.","Add a splash of milk for extra richness.","Serve as is &mdash; it's naturally sweet."],
+    tip:"<b>Naturally honey-sweet</b> &mdash; you rarely need to add sugar."
+  },
+  {
+    name:"Passionfruit Green",
+    emoji:"🥝",
+    tint:"#e6ecc9",
+    cats:["fruity","quick"],
+    time:"5 min",
+    serves:"1 cup",
+    tag:"Tangy, tropical, and vibrant. Green tea with a burst of sunshine.",
+    ing:["1 green tea bag","Pulp of 1/2 passionfruit","1 cup hot water (not boiling)","1 tsp honey"],
+    steps:["Steep the green tea in hot water 2-3 minutes, then remove.","Stir in the passionfruit pulp.","Sweeten with honey.","Serve warm or over ice."],
+    tip:"<b>Add the pulp after steeping</b> so the green tea stays smooth."
+  },
+  {
+    name:"Spiced Plum",
+    emoji:"🟪",
+    tint:"#e3d2dd",
+    cats:["fruity","spiced"],
+    time:"13 min",
+    serves:"2 cups",
+    tag:"Deep, jammy, and lightly spiced. Tastes like late-summer twilight.",
+    ing:["2 ripe plums, pitted and sliced","1 cinnamon stick","2 whole cloves","3 cups water","1 tsp honey"],
+    steps:["Simmer the plums, cinnamon, and cloves in water 9-10 minutes.","Press the plums gently as they soften.","Strain into cups.","Sweeten with honey to round out the tartness."],
+    tip:"<b>Riper plums</b> give a sweeter, deeper-colored brew."
+  },
+  {
+    name:"Marshmallow Root",
+    emoji:"🤍",
+    tint:"#ece4d6",
+    cats:["herbal"],
+    time:"10 min",
+    serves:"2 cups",
+    tag:"Silky, mild, and deeply soothing. A gentle balm for a sore throat.",
+    ing:["1 tbsp dried marshmallow root","3 cups water","1 tsp honey","Squeeze of lemon (optional)"],
+    steps:["Add the marshmallow root to a pot with the water.","Warm gently &mdash; a low simmer, not a hard boil.","Steep 7-8 minutes until slightly silky.","Strain, then add honey and lemon."],
+    tip:"<b>A cold steep works too</b> &mdash; soak overnight for the softest, silkiest cup."
+  }
+];
+
+const grid = document.getElementById('grid');
+let currentFilter = 'all';
+
+// --- Favorites (saved in this browser) ---
+let favs = new Set();
+try { favs = new Set(JSON.parse(localStorage.getItem('easySteepFavs') || '[]')); } catch(e){}
+function saveFavs(){
+  try { localStorage.setItem('easySteepFavs', JSON.stringify([...favs])); } catch(e){}
+}
+
+function render(list){
+  grid.innerHTML = '';
+  if(list.length === 0){
+    grid.innerHTML = `<p class="empty">No favorites yet. Tap the ♥ on any tea to save it here.</p>`;
+    return;
+  }
+  list.forEach((t,i)=>{
+    const card = document.createElement('article');
+    card.className='card';
+    card.style.setProperty('--tint',t.tint);
+    const isFav = favs.has(t.name);
+    card.innerHTML = `
+      <div class="card-top">
+        <button class="fav ${isFav?'on':''}" data-name="${t.name}" aria-label="Save ${t.name} to favorites" aria-pressed="${isFav}">${isFav?'♥':'♡'}</button>
+        <div class="emoji">${t.emoji}</div>
+        <h2>${t.name}</h2>
+        <p class="tagline">${t.tag}</p>
+        <div class="meta">
+          <span>⏱ ${t.time}</span>
+          <span>🫖 ${t.serves}</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="lbl">Ingredients</div>
+        <ul class="ing">${t.ing.map(x=>`<li>${x}</li>`).join('')}</ul>
+        <div class="lbl">How to make it</div>
+        <ol class="steps">${t.steps.map(x=>`<li>${x}</li>`).join('')}</ol>
+        <div class="tip">${t.tip}</div>
+      </div>`;
+    grid.appendChild(card);
+    setTimeout(()=>card.classList.add('in'), 60*i);
+  });
+}
+
+function filter(f){
+  if(f==='all') return teas;
+  if(f==='fav') return teas.filter(t=>favs.has(t.name));
+  if(f==='quick') return teas.filter(t=>parseInt(t.time)<=5 || t.cats.includes('quick'));
+  return teas.filter(t=>t.cats.includes(f));
+}
+
+document.getElementById('filters').addEventListener('click',e=>{
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.f;
+  render(filter(currentFilter));
+});
+
+// Toggle a favorite when its heart is tapped
+grid.addEventListener('click',e=>{
+  const btn = e.target.closest('.fav');
+  if(!btn) return;
+  const name = btn.dataset.name;
+  if(favs.has(name)){ favs.delete(name); }
+  else { favs.add(name); }
+  saveFavs();
+  if(currentFilter === 'fav'){
+    render(filter('fav'));           // drop it out of the Favorites view live
+  } else {
+    const on = favs.has(name);
+    btn.classList.toggle('on', on);
+    btn.textContent = on ? '♥' : '♡';
+    btn.setAttribute('aria-pressed', on);
+    if(on){ btn.classList.add('pop'); setTimeout(()=>btn.classList.remove('pop'),320); }
+  }
+});
+
+render(teas);
+</script>
+</body>
+</html>
